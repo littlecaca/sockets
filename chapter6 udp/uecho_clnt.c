@@ -49,7 +49,6 @@ int main(int argc, char const *argv[])
         errorHandling("connect() error");
     
     
-    
     while (printf("> (q to quit):"), fgets(buf, BUFSIZE, stdin))
     {
         if (!strcmp(buf, "q\n") || !strcmp(buf, "Q\n"))
