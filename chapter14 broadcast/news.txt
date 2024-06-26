@@ -1,0 +1,3 @@
+The struct ip_mreq is defined in the ws2ipdef.h header file on Windows systems. This structure is used for handling IPv4 multicast group memberships in network programming. It consists of two members: imr_multiaddr, which holds the address of the multicast group, and imr_interface, which specifies the local interface address.
+
+On Linux systems, a similar structure, struct ip_mreq, is defined in the <netinet/in.h> header file. This structure is also used for multicast group management and includes the same members for specifying the multicast group address and the local interface.

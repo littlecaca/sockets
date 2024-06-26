@@ -23,7 +23,6 @@ void error_handling(const char *message)
     exit(1);
 }
 
-
 int main(int argc, char const *argv[])
 {
     struct sockaddr_in recv_addr, clnt_addr;
