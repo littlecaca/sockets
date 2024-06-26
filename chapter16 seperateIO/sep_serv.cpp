@@ -70,16 +70,23 @@ int main(int argc, char const *argv[])
         else
             printf("Connected client %d\n", i + 1);
         writefp = fdopen(clnt_sock, "w");
-        readfp = fdopen(clnt_sock, "r");
+
+        readfp = fdopen(dup(clnt_sock), "r");
         // echo()
-        while (fgets(buf, BUFSIZE, readfp) != NULL)
-        {
-            if (fputs(buf, writefp) == EOF)
-                error_handling("fputs() error");
-            fflush(writefp);
-        }
-        fclose(readfp);
+
+        fputs("Hi client? \n", writefp);
+        fputs("It's a nice day? right?\n", writefp);
+        fputs("Come with me!? ha?\n", writefp);
+
+        fflush(writefp);
+        // 调用shutdown函数时，无论复制出多少文件描述符都进入半关闭状态，同时传递EOF
+        shutdown(fileno(writefp), SHUT_WR);
         fclose(writefp);
+
+        fgets(buf, BUFSIZE, readfp);
+        fputs(buf, stdout);
+
+        fclose(readfp);
     }
     close(serv_sock);
 
