@@ -52,8 +52,9 @@ int main(int argc, char const *argv[])
     adr_sz = sizeof(clnt_addr);
     recv_sock = accept(serv_sock, (struct sockaddr *)&clnt_addr, &adr_sz);
 
-    while ((str_len = recv(recv_sock, buf, BUFSIZE - 1, MSG_PEEK | MSG_DONTWAIT)))
+    while (1)
     {
+        str_len = recv(recv_sock, buf, BUFSIZE - 1, MSG_PEEK | MSG_DONTWAIT);
         if (str_len > 0)
             break;
     }

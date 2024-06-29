@@ -31,9 +31,7 @@ int main(int argc, char const *argv[])
             break;
         }
         else if (result == 0)
-        {
             puts("time out");
-        }
         else
         {
             if (FD_ISSET(0, &temps))
