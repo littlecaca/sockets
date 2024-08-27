@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
         error_handling("pthread_join() error");
     if (pthread_join(t_id2, &thr_ret2) != 0)
         error_handling("pthread_join() error");
-    
+        
     printf("The answer of sum(1, 10) is %d\n", *(int *)thr_ret1 + *(int *)thr_ret2);
     free(thr_ret1);
     free(thr_ret2);
