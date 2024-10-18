@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
     FD_ZERO(&reads);
     FD_SET(0, &reads);
 
-    // 调用select函数之后，timeout将被替换为超市前剩余时间，因此
+    // 调用select函数之后，timeout将被替换为超时前剩余时间，因此
     // 应该在循环体内设置timeout的值
     // timeout.tv_sec = 5;
     // timeout.tv_usec = 5000;

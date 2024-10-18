@@ -110,6 +110,7 @@ int main(int argc, char const *argv[])
         close(fds[1]);
         save_message(fds[0], "data.txt");
         close(fds[0]);
+        return 0;
     }
 
     for (int i = 0; i < 50; ++i)
