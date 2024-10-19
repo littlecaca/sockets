@@ -4,21 +4,23 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <stdlib.h>
+#include <errno.h>
 
 /**
  * Hello World Server!
  */
 
-void error_handling(const char *message)
-{
-    fputs(message, stderr);
-    fputc('\n', stderr);
-    exit(1);
-}
+
 
 #define BUFSIZE 50
 #define TRUE 1
 #define FALSE 0
+
+void error_handling(const char *message)
+{
+    fprintf(stderr, "%s:%s\n", message, strerror(errno));   
+    exit(1);
+}
 
 int main(int argc, char const *argv[])
 {
