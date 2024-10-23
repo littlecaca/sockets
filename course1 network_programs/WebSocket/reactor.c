@@ -78,7 +78,7 @@ void closefd(int fd)
     // close
     set_event(fd, 0, EPOLL_CTL_DEL);
     if (close(fd) == -1) error_handling("close() fails");
-    // printf("close client %d\n", fd);
+    printf("close client %d\n", fd);
 }
 
 int accept_cb(int fd);
@@ -108,10 +108,12 @@ int recv_cb(int fd)
     pconn->rlength = read_len;
     pconn->rbuffer[read_len] = '\0';
 
-    http_request(pconn);
-
+#ifdef WEBSOCKET
+        ws_request(pconn);
+#else
+        http_request(pconn);
+#endif
     set_event(fd, EPOLLOUT, EPOLL_CTL_MOD);
-
     return 0;
 }
 
@@ -133,21 +135,20 @@ int registerCallback(int fd, int flag)
 int send_cb(int fd)
 {
     struct Conn *pconn = conn_list + fd;
-    http_response(pconn);
-    if (pconn->status == 2)
-    {
-        closefd(pconn->fd);
-    }
-    else
-    {
-        int clnt_fd = pconn->fd;
+#ifdef WEBSOCKET
+        ws_response(pconn);
+#else
+        http_response(pconn);
+#endif
 
-        if (pconn->wlength > 0)
-        {
-            send(clnt_fd, pconn->wbuffer, pconn->wlength, 0);
-        }
-        // set_event(clnt_fd, EPOLLIN, EPOLL_CTL_MOD);
+    int clnt_fd = pconn->fd;
+
+    if (pconn->wlength > 0)
+    {
+        send(clnt_fd, pconn->wbuffer, pconn->wlength, 0);
     }
+    set_event(clnt_fd, EPOLLIN, EPOLL_CTL_MOD);
+    
     return 0;
 }
 
