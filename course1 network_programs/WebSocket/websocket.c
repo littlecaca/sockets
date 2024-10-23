@@ -9,6 +9,7 @@ void demask(char *data,int len,char *mask){
 		*(data+i) ^= *(mask+(i%4));
 }
 
+
 char* decode_packet(unsigned char *stream, char *mask, int length, int *ret) {
 
 	nty_ophdr *hdr =  (nty_ophdr*)stream;
@@ -18,7 +19,7 @@ char* decode_packet(unsigned char *stream, char *mask, int length, int *ret) {
 	//char mask[4] = {0};
 	int i = 0;
 
-	if ((hdr->mask & 0x7F) == 126) {
+	if ((hdr->payload_length & 0x7F) == 126) {
 
 		nty_websocket_head_126 *hdr126 = (nty_websocket_head_126*)data;
 		size = hdr126->payload_length;
@@ -29,7 +30,7 @@ char* decode_packet(unsigned char *stream, char *mask, int length, int *ret) {
 		
 		start = 8;
 		
-	} else if ((hdr->mask & 0x7F) == 127) {
+	} else if ((hdr->payload_length & 0x7F) == 127) {
 
 		nty_websocket_head_127 *hdr127 = (nty_websocket_head_127*)data;
 		size = hdr127->payload_length;
@@ -51,7 +52,6 @@ char* decode_packet(unsigned char *stream, char *mask, int length, int *ret) {
 	demask(stream+start, size, mask);
 
 	return stream + start;
-	
 }
 
 int encode_packet(char *buffer,char *mask, char *stream, int length) {
