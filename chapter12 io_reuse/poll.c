@@ -1,33 +1,24 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
-#include <sys/select.h>
+#include <sys/poll.h>
 
 #define BUFSIZE 30
 
 int main(int argc, char const *argv[])
 {
-    // 创建文件描述符集合
-    fd_set reads, temps;
+    // 创建监听事件集合
+    struct pollfd pfd;
     // 监听读事件
-    FD_ZERO(&reads);
-    FD_SET(0, &reads);
+    pfd.fd = 0;
+    pfd.events |= POLLIN;
 
     int result, str_len;
     char buf[BUFSIZE];
-    struct timeval timeout = {0};
-
-
-    // 调用select函数之后，timeout将被替换为超时前剩余时间，因此
-    // 应该在循环体内设置timeout的值
-    // timeout.tv_sec = 5;
-    // timeout.tv_usec = 5000;
 
     while (1)
     {
-        temps = reads;
-        timeout.tv_sec = 5;
-        result = select(1, &temps, 0, 0, &timeout);
+        result = poll(&pfd, 1, 1000 * 60); // 60s
         if (result == -1)
         {
             puts("select() error");
@@ -37,9 +28,9 @@ int main(int argc, char const *argv[])
             puts("time out");
         else
         {
-            if (FD_ISSET(0, &temps))
+            if (pfd.revents & POLLIN)
             {
-                str_len = read(0, buf, BUFSIZE - 1);
+                str_len = read(pfd.fd, buf, sizeof buf - 1);
                 buf[str_len] = 0;
                 printf("message from console: %s", buf);
             }
