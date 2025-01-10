@@ -5,6 +5,8 @@
         "unistd.h": "c",
         "signal.h": "c",
         "types.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "setjmp.h": "c",
+        "ucontext.h": "c"
     }
 }

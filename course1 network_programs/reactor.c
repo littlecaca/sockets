@@ -110,8 +110,6 @@ int recv_cb(int fd)
 
     http_request(pconn);
 
-    set_event(fd, EPOLLOUT, EPOLL_CTL_MOD);
-
     return 0;
 }
 
